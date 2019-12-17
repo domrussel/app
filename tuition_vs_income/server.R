@@ -1,5 +1,6 @@
 library(shiny)
 library(leaflet)
+library(ggthemes)
 
 setwd("C:/Users/Dominic/Documents/tuition_v_income/app/")
 source("tuition_vs_income/global.R")
@@ -37,12 +38,15 @@ shinyServer(function(input, output) {
         metric == "pct_change_median_hh_income" ~ "% Change Income",
         metric == "pct_change_tuition" ~ "% Change Tuition"
       )) %>% 
-      ggplot(aes(x=metric, y=value, fill=metric)) + geom_bar(stat="identity") +
-      scale_y_continuous(limits=c(-4, 695)) + theme_classic() +
-      # scale_fill_manual(values = c("blue", "red")) +
-      geom_text(aes(label=return_prty_pct(value)), nudge_y = 18) +
-      labs(title="Change in Median Household Income vs \n Change in Flagship School Tuition \n 1980 to 2018") +
-      guides(fill=FALSE)
+      ggplot(aes(x=metric, y=value, fill=metric)) + 
+        geom_bar(stat="identity") + 
+        scale_y_continuous(limits=c(-4, 695)) + 
+        scale_fill_brewer(palette="Set1", direction=-1) +
+        theme_bw() +
+        geom_text(aes(label=return_prty_pct(value)), nudge_y = 18) +
+        labs(title="Change in Median Household Income vs \n Change in Flagship School Tuition \n 1980 to 2018",
+             x="", y="") +
+        guides(fill=FALSE)
   })
   
   output$summary_stats <- renderUI({
@@ -58,12 +62,19 @@ shinyServer(function(input, output) {
     school_name <- first(dat$institution_name)
     state_name <- first(dat$state)
     
-    str1 <- paste0("Tuition 1980 at <i>", school_name, "</i> (inflation adjusted): <b> $", round(tuition_1980,0), "</b>")
-    str2 <- paste0("Tuition 2017 at <i>", school_name, "</i>: <b>$", tuition_2017, "</b>")
-    str3 <- paste0("Median household income 1980 in <i>", state_name, "</i> (inflation adjusted): <b> $", round(median_hh_income_1980,0), "</b>")
-    str4 <- paste0("Median household income 2017 in <i>", state_name, "</i>: <b> $", round(median_hh_income_2017,0), "</b>")
+    str1 <- paste0("Tuition 1980 at <i>", school_name, "</i> (inflation adjusted): <b><font color='#E41A1C'>$",
+                   prettyNum(round(tuition_1980,0), big.mark=","), "</font></b>")
     
-    HTML(paste(str1, str2, str3, str4, sep = '<br/>'))  
+    str2 <- paste0("Tuition 2017 at <i>", school_name, "</i>: <b><font color='#E41A1C'>$",
+                   prettyNum(round(tuition_2017,0), big.mark=","), "</font></b></br>")
+    
+    str3 <- paste0("Median household income 1980 in <i>", state_name,"</i> (inflation adjusted): <b><font color='#377EB8'>$",
+                   prettyNum(round(median_hh_income_1980,0), big.mark=","), "</font></b>")
+    
+    str4 <- paste0("Median household income 2017 in <i>", state_name, "</i>: <b><font color='#377EB8'>$",
+                   prettyNum(round(median_hh_income_2017,0), big.mark=","), "</font></b>")
+    
+    HTML(paste("<center>", str1, str2, str3, str4, "</center>", "</br>", sep = '<br/>'))  
   })
   
   output$savings <- renderUI({
@@ -84,12 +95,11 @@ shinyServer(function(input, output) {
     yrs_to_save_2017 <- (tuition_2017*4)/yr_savings_2017
     
     str1 <- paste0("If your income was ", savingsChoices()[1]/100, "x the median household and you allocated ",
-                   savingsChoices()[2], "% each year for school, it would take you:")
-    str2 <- paste0(round(yrs_to_save_1980,1), " years in 1980")
-    str3 <- paste0(round(yrs_to_save_2017,1), " years in 2017")
-    str4 <- "to save for four years of tuition + mandatory fees"
-    
-    HTML(paste(str1, "<b>", str2, str3, "</b>", str4, sep = '<br/>'))
+                   savingsChoices()[2], "% each year for school, saving for four years of tuition + mandatory fees would take you:")
+    str2 <- paste0("<center>", round(yrs_to_save_1980,1), " years in 1980")
+    str3 <- paste0(round(yrs_to_save_2017,1), " years in 2017 </center>")
+
+    HTML(paste(str1, "<b>", str2, str3, sep = '<br/>'))
   })
   
   currentState <- reactive({
@@ -115,7 +125,7 @@ shinyServer(function(input, output) {
         data = filter(map_dat, NAME == currentState()),
         weight = 1,
         color = "white",
-        fillColor = "navy",
+        fillColor = "black",
         fillOpacity = 0.9,
         layerId = ~NAME
       )

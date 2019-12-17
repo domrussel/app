@@ -20,7 +20,8 @@ shinyUI(fluidPage(
   tags$div(style='height:10px'),
   
   fluidRow(
-    column(4,
+    column(1),
+    column(10,
            htmlOutput("savings"),
            tags$body("(Adjust below)"),
            tags$br(),
@@ -28,9 +29,11 @@ shinyUI(fluidPage(
                  min = 1, max = 2000, width='300px'),
            numericInput('pct_save', "Percet of income saved for tuition:", value=5,
                  min = 1, max = 100, width='300px')),
-    column(8,
-           htmlOutput("summary_stats")
-    )
-    
+    column(1)
+    ),
+  
+  fluidRow(
+    column(12,
+           htmlOutput("summary_stats"))
   )
 ))
