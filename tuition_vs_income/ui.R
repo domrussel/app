@@ -7,11 +7,11 @@ setwd("C:/Users/Dominic/Documents/tuition_v_income/app")
 shinyUI(fluidPage(
   
   fluidRow(
-    column(4),
-    column(8, tags$h2("Click a state to view"))
+    HTML("<h3><center> Public University Affordability by State </center></h2>")
   ),
-  
-    
+  fluidRow(
+    HTML("<h4><center>(Click a state to view)</center></h4>")
+  ),
   fluidRow(
     column(4, plotOutput('income_vs_tuition', height = 420)),
     column(8, leafletOutput('map', height = 400))
@@ -22,16 +22,12 @@ shinyUI(fluidPage(
   fluidRow(
     column(1),
     column(10,
-           htmlOutput("savings"),
-           tags$body("(Adjust below)"),
+           htmlOutput("savings_choice"),
            tags$br(),
-           numericInput('pct_median', "Percent of median income:", value=100,
-                 min = 1, max = 2000, width='300px'),
-           numericInput('pct_save', "Percet of income saved for tuition:", value=5,
-                 min = 1, max = 100, width='300px')),
+           htmlOutput("savings_outcome")),
     column(1)
     ),
-  
+  tags$hr(),
   fluidRow(
     column(12,
            htmlOutput("summary_stats"))

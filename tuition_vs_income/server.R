@@ -62,7 +62,7 @@ shinyServer(function(input, output) {
     school_name <- first(dat$institution_name)
     state_name <- first(dat$state)
     
-    str1 <- paste0("Tuition 1980 at <i>", school_name, "</i> (inflation adjusted): <b><font color='#E41A1C'>$",
+    str1 <- paste0("<center> Tuition 1980 at <i>", school_name, "</i> (inflation adjusted): <b><font color='#E41A1C'>$",
                    prettyNum(round(tuition_1980,0), big.mark=","), "</font></b>")
     
     str2 <- paste0("Tuition 2017 at <i>", school_name, "</i>: <b><font color='#E41A1C'>$",
@@ -72,13 +72,22 @@ shinyServer(function(input, output) {
                    prettyNum(round(median_hh_income_1980,0), big.mark=","), "</font></b>")
     
     str4 <- paste0("Median household income 2017 in <i>", state_name, "</i>: <b><font color='#377EB8'>$",
-                   prettyNum(round(median_hh_income_2017,0), big.mark=","), "</font></b>")
+                   prettyNum(round(median_hh_income_2017,0), big.mark=","), "</font></b></center>")
     
-    HTML(paste("<center>", str1, str2, str3, str4, "</center>", "</br>", sep = '<br/>'))  
+    HTML(paste(str1, str2, str3, str4, "</center>", "</br>", sep = '<br/>'))  
   })
   
-  output$savings <- renderUI({
-    
+  output$savings_choice <- renderUI({
+
+    # <input type=text size=1 value=1 type=number min=0 step=0.1>
+    str <- paste0("If your income was <input type=number name=savings1 style='width: 50px; text-align:center; font-weight:bold' value=1 min=0 step=0.1>",
+                   "<b>times</b> the median household in <i>", currentState(), "</i> and you allocated <input type=number name=savings2 style='width: 50px;  text-align:center; font-weight:bold' value=5 min=0 step=1>",
+                   "<b>percent</b> each year for school, saving for four years of tuition + mandatory fees would take you:")
+    HTML(str)
+  })   
+
+  output$savings_outcome <- renderUI({
+
     dat <- allchanges %>% 
       filter(state == currentState())
     
@@ -88,18 +97,16 @@ shinyServer(function(input, output) {
     median_hh_income_1980 <- filter(dat, yr==1980)$median_hh_income_adj
     median_hh_income_2017 <- filter(dat, yr==2017)$median_hh_income
     
-    yr_savings_1980 <- median_hh_income_1980*(savingsChoices()[1]/100)*(savingsChoices()[2]/100)
-    yr_savings_2017 <- median_hh_income_2017*(savingsChoices()[1]/100)*(savingsChoices()[2]/100)
+    yr_savings_1980 <- median_hh_income_1980*(savingsChoices()[1])*(savingsChoices()[2]/100)
+    yr_savings_2017 <- median_hh_income_2017*(savingsChoices()[1])*(savingsChoices()[2]/100)
     
     yrs_to_save_1980 <- (tuition_1980*4)/yr_savings_1980
     yrs_to_save_2017 <- (tuition_2017*4)/yr_savings_2017
-    
-    str1 <- paste0("If your income was ", savingsChoices()[1]/100, "x the median household and you allocated ",
-                   savingsChoices()[2], "% each year for school, saving for four years of tuition + mandatory fees would take you:")
+
     str2 <- paste0("<center>", round(yrs_to_save_1980,1), " years in 1980")
     str3 <- paste0(round(yrs_to_save_2017,1), " years in 2017 </center>")
-
-    HTML(paste(str1, "<b>", str2, str3, sep = '<br/>'))
+    
+    HTML(paste(str2, str3, sep = '<br/>'))
   })
   
   currentState <- reactive({
@@ -132,7 +139,7 @@ shinyServer(function(input, output) {
   })
   
   savingsChoices <- reactive({
-    c(input$pct_median, input$pct_save)
+    c(input$savings1, input$savings2)
   })
   
 })
