@@ -38,14 +38,19 @@ shinyServer(function(input, output) {
         metric == "pct_change_tuition" ~ "% Change Tuition"
       )) %>% 
       ggplot(aes(x=metric, y=value, fill=metric)) + 
-        geom_bar(stat="identity") + 
-        scale_y_continuous(limits=c(-4, 695)) + 
-        scale_fill_brewer(palette="Set1", direction=-1) +
-        theme_bw() +
-        geom_text(aes(label=return_prty_pct(value)), nudge_y = 18) +
-        labs(title="Change in Median Household Income vs \n Change in Flagship School Tuition \n 1980 to 2018",
-             x="", y="") +
-        guides(fill=FALSE)
+      geom_bar(stat="identity") + 
+      scale_y_continuous(limits=c(-4, 695)) + 
+      scale_fill_brewer(palette="Set1", direction=-1) +
+      theme(panel.background = element_rect(fill="#363636", colour="#363636", linetype=0),
+            panel.grid.major = element_line(size=0),
+            panel.grid.minor = element_line(size=0),
+            plot.background = element_rect(fill = "#363636", size=0),
+            plot.title = element_text(color = "#f0f0f0"),
+            axis.text.x = element_text(color = "#f0f0f0")) +
+      guides(fill=FALSE) +
+      geom_text(aes(label=return_prty_pct(value)), nudge_y = 18, color = "#f0f0f0") +
+      labs(title="Change in Median Household Income vs \n Change in Flagship School Tuition \n 1980 to 2018",
+           x="", y="")
   })
   
   output$summary_stats <- renderUI({
