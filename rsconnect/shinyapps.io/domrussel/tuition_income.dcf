@@ -1,0 +1,13 @@
+name: tuition_income
+title: tuition_income
+username:
+account: domrussel
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1610991
+bundleId: 2685339
+url: https://domrussel.shinyapps.io/tuition_income/
+when: 1576943134.1373
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .gitattributes
