@@ -34,9 +34,10 @@ shinyServer(function(input, output) {
       filter(yr == 2017) %>% mutate(yr = as.factor(yr)) %>% 
       mutate(value = value*100) %>% 
       mutate(metric = case_when(
-        metric == "pct_change_median_hh_income" ~ "% Change \n Income",
-        metric == "pct_change_tuition" ~ "% Change \n Tuition"
+        metric == "pct_change_median_hh_income" ~ "% Change \n Median \n Income",
+        metric == "pct_change_tuition" ~ "% Change \n In-state \n Tuition"
       )) %>% 
+      mutate(metric = factor(metric, levels=c("% Change \n Median \n Income", "% Change \n In-state \n Tuition"))) %>% 
       ggplot(aes(x=metric, y=value, fill=metric)) + 
       geom_bar(stat="identity") + 
       scale_y_continuous(limits=c(-4, 695)) + 
@@ -50,7 +51,7 @@ shinyServer(function(input, output) {
             text=element_text(family="serif", size=12)) +
       guides(fill=FALSE) +
       geom_text(aes(label=return_prty_pct(value)), nudge_y = 20, color = "#f0f0f0", family="serif", size=6) +
-      labs(title="Inflation adjusted change 1980 to 2018",
+      labs(title="\n Inflation adjusted change 1980 to 2018",
            x="", y="")
   })
   
@@ -83,11 +84,17 @@ shinyServer(function(input, output) {
   })
   
   output$savings_choice <- renderUI({
-
+    
+    currentSchool <- 
+      allchanges %>% 
+      filter(state == currentState()) %>% 
+      .$institution_name %>% 
+      first
+    
     # <input type=text size=1 value=1 type=number min=0 step=0.1>
-    str <- paste0("If your income was <input type=number name=savings1 style='width: 50px; text-align:center; font-weight:bold; background-color:#363636; border-color:#f0f0f0' value=1 min=0 step=0.1>",
-                   "<b> times</b> the median household in <i>", currentState(), "</i> and you allocated <input type=number name=savings2 style='width: 50px;  text-align:center; font-weight:bold; background-color:#363636; border-color:#f0f0f0' value=5 min=0 step=1>",
-                   "<b> percent</b> each year for school, saving for four years of tuition + mandatory fees would take you:")
+    str <- paste0("If your household income was <input type=number name=savings1 style='width: 50px; text-align:center; font-weight:bold; background-color:#363636; border-color:#f0f0f0' value=1 min=0 step=0.1>",
+                   "<b> times</b> the median in <i>", currentState(), "</i> and you allocated <input type=number name=savings2 style='width: 50px;  text-align:center; font-weight:bold; background-color:#363636; border-color:#f0f0f0' value=5 min=0 step=1>",
+                   "<b> percent</b> each year for school, saving for four years of in-state tuition + mandatory fees at <i>", currentSchool, "</i> would take you:")
     HTML(str)
   })   
 
