@@ -12,13 +12,13 @@ shinyUI(fluidPage(
     shinydashboard = FALSE
   ),
   
-  HTML("<font color='#f0f0f0'>"),
+  HTML("<font color='#f0f0f0' face='lato' size='+0.8'>"),
   
   fluidRow(
-    HTML("<h3><center> Public University Affordability by State </center></h2>")
+    HTML("<h2><center> Public University Affordability by State </center></h2>")
   ),
   fluidRow(
-    HTML("<h4><center>(Click a state to view)</center></h4>")
+    HTML("<h3><center>(Click a state to view)</center></h3>")
   ),
   fluidRow(
     column(8, leafletOutput('map', height = 400)),

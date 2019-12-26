@@ -8,11 +8,8 @@ shinyServer(function(input, output) {
   
   output$map <- renderLeaflet({
     leaflet(map_dat) %>%
+      # This is essentially doing nothing except fixing the width?
       addPolygons(
-        weight = 1,
-        color = "white",
-        fillColor = "gray",
-        fillOpacity = 0.9,
         layerId = ~NAME
       )
   })
@@ -34,8 +31,8 @@ shinyServer(function(input, output) {
       filter(yr == 2017) %>% mutate(yr = as.factor(yr)) %>% 
       mutate(value = value*100) %>% 
       mutate(metric = case_when(
-        metric == "pct_change_median_hh_income" ~ "% Change Income",
-        metric == "pct_change_tuition" ~ "% Change Tuition"
+        metric == "pct_change_median_hh_income" ~ "% Change \n Income",
+        metric == "pct_change_tuition" ~ "% Change \n Tuition"
       )) %>% 
       ggplot(aes(x=metric, y=value, fill=metric)) + 
       geom_bar(stat="identity") + 
@@ -46,9 +43,10 @@ shinyServer(function(input, output) {
             panel.grid.minor = element_line(size=0),
             plot.background = element_rect(fill = "#363636", size=0),
             plot.title = element_text(color = "#f0f0f0"),
-            axis.text.x = element_text(color = "#f0f0f0")) +
+            axis.text.x = element_text(color = "#f0f0f0", size=17),
+            text=element_text(family="serif", size=12)) +
       guides(fill=FALSE) +
-      geom_text(aes(label=return_prty_pct(value)), nudge_y = 18, color = "#f0f0f0") +
+      geom_text(aes(label=return_prty_pct(value)), nudge_y = 20, color = "#f0f0f0", family="serif", size=6) +
       labs(title="Change in Median Household Income vs \n Change in Flagship School Tuition \n 1980 to 2018",
            x="", y="")
   })
@@ -84,9 +82,9 @@ shinyServer(function(input, output) {
   output$savings_choice <- renderUI({
 
     # <input type=text size=1 value=1 type=number min=0 step=0.1>
-    str <- paste0("If your income was <input type=number name=savings1 style='width: 50px; text-align:center; font-weight:bold' value=1 min=0 step=0.1>",
-                   "<b>times</b> the median household in <i>", currentState(), "</i> and you allocated <input type=number name=savings2 style='width: 50px;  text-align:center; font-weight:bold' value=5 min=0 step=1>",
-                   "<b>percent</b> each year for school, saving for four years of tuition + mandatory fees would take you:")
+    str <- paste0("If your income was <input type=number name=savings1 style='width: 50px; text-align:center; font-weight:bold; background-color:#363636; border-color:#f0f0f0' value=1 min=0 step=0.1>",
+                   "<b> times</b> the median household in <i>", currentState(), "</i> and you allocated <input type=number name=savings2 style='width: 50px;  text-align:center; font-weight:bold; background-color:#363636; border-color:#f0f0f0' value=5 min=0 step=1>",
+                   "<b> percent</b> each year for school, saving for four years of tuition + mandatory fees would take you:")
     HTML(str)
   })   
 
