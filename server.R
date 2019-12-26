@@ -10,11 +10,6 @@ shinyServer(function(input, output) {
     leaflet(map_dat) %>% 
       fitBounds(-124.7844079,24.7433195,-66.9513812,49.3457868) %>% 
       setMaxBounds(-124.7844079,24.7433195,-66.9513812,49.3457868)
-      # %>%
-      # This is essentially doing nothing except fixing the width?
-      # addPolygons(
-      #   layerId = ~NAME
-      # )
   })
   
   output$income_vs_tuition <- renderPlot({
@@ -39,7 +34,7 @@ shinyServer(function(input, output) {
       )) %>% 
       mutate(metric = factor(metric, levels=c("% Change \n Median \n Income", "% Change \n In-state \n Tuition"))) %>% 
       ggplot(aes(x=metric, y=value, fill=metric)) + 
-      geom_bar(stat="identity") + 
+      geom_bar(stat="identity", width=0.6) + 
       scale_y_continuous(limits=c(-4, 695)) + 
       scale_fill_brewer(palette="Set1", direction=-1) +
       theme(panel.background = element_rect(fill="#363636", colour="#363636", linetype=0),
@@ -115,7 +110,7 @@ shinyServer(function(input, output) {
     yrs_to_save_1980 <- (tuition_1980*4)/yr_savings_1980
     yrs_to_save_2017 <- (tuition_2017*4)/yr_savings_2017
 
-    str2 <- paste0("<center><b><font face='sans-serif' size='+1.5'>", round(yrs_to_save_1980,1), " years in 1980")
+    str2 <- paste0("<center><b><font face='sans-serif' size='+2'>", round(yrs_to_save_1980,1), " years in 1980")
     str3 <- paste0(round(yrs_to_save_2017,1), " years in 2017 </font></b></center>")
     
     HTML(paste(str2, str3, sep = '<br/>'))

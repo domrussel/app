@@ -22,7 +22,7 @@ shinyUI(fluidPage(
     HTML("<h2 style='font-family:sans-serif;'><center><b> Public University Affordability by State </b></center></h2>")
   ),
   fluidRow(
-    HTML("<h3 style='font-family:sans-serif;'><center>(Click a state to view)</center></h3>")
+    HTML("<h3 style='font-family:sans-serif;'><center>(Click a state then scroll to view)</center></h3>")
   ),
   tags$br(),
   fluidRow(
