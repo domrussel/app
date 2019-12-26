@@ -41,7 +41,7 @@ shinyServer(function(input, output) {
             panel.grid.major = element_line(size=0),
             panel.grid.minor = element_line(size=0),
             plot.background = element_rect(fill = "#363636", size=0),
-            plot.title = element_text(color = "#f0f0f0", size=17, hjust=0.5),
+            plot.title = element_text(color = "#f0f0f0", size=17, hjust=0.5, family="sans", face="bold"),
             axis.text.x = element_text(color = "#f0f0f0", size=17),
             text=element_text(family="serif", size=12)) +
       guides(fill=FALSE) +
