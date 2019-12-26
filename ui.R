@@ -5,6 +5,10 @@ library(shinyWidgets)
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
   
+  tags$head(
+    tags$style(HTML(".leaflet-container { background: #414141;}"))
+  ),
+  
   setBackgroundColor(
     color = "#363636",
     gradient = c("linear", "radial"),
@@ -12,32 +16,38 @@ shinyUI(fluidPage(
     shinydashboard = FALSE
   ),
   
-  HTML("<font color='#f0f0f0' face='lato' size='+0.8'>"),
+  HTML("<font color='#f0f0f0' face='lato' size='+1'>"),
   
   fluidRow(
-    HTML("<h2><center> Public University Affordability by State </center></h2>")
+    HTML("<h2 style='font-family:sans-serif;'><center><b> Public University Affordability by State </b></center></h2>")
   ),
   fluidRow(
-    HTML("<h3><center>(Click a state to view)</center></h3>")
+    HTML("<h3 style='font-family:sans-serif;'><center>(Click a state to view)</center></h3>")
   ),
+  tags$br(),
   fluidRow(
-    column(8, leafletOutput('map', height = 400)),
-    column(4, plotOutput('income_vs_tuition', height = 420))
+    column(7, leafletOutput('map', height = 400)),
+    column(5, plotOutput('income_vs_tuition', height = 420))
   ),
   
   tags$div(style='height:10px'),
   
+  tags$hr(),
   fluidRow(
     column(1),
     column(10,
+           tags$br(),
            htmlOutput("savings_choice"),
            tags$br(),
-           htmlOutput("savings_outcome")),
+           htmlOutput("savings_outcome"),
+           tags$br()),
     column(1)
     ),
   tags$hr(),
+  tags$br(),
   fluidRow(
     column(12,
            htmlOutput("summary_stats"))
-  )
+  ),
+  tags$hr()
 ))

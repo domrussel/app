@@ -7,11 +7,14 @@ source("global.R")
 shinyServer(function(input, output) {
   
   output$map <- renderLeaflet({
-    leaflet(map_dat) %>%
+    leaflet(map_dat) %>% 
+      fitBounds(-124.7844079,24.7433195,-66.9513812,49.3457868) %>% 
+      setMaxBounds(-124.7844079,24.7433195,-66.9513812,49.3457868)
+      # %>%
       # This is essentially doing nothing except fixing the width?
-      addPolygons(
-        layerId = ~NAME
-      )
+      # addPolygons(
+      #   layerId = ~NAME
+      # )
   })
   
   output$income_vs_tuition <- renderPlot({
@@ -42,12 +45,12 @@ shinyServer(function(input, output) {
             panel.grid.major = element_line(size=0),
             panel.grid.minor = element_line(size=0),
             plot.background = element_rect(fill = "#363636", size=0),
-            plot.title = element_text(color = "#f0f0f0"),
+            plot.title = element_text(color = "#f0f0f0", size=17),
             axis.text.x = element_text(color = "#f0f0f0", size=17),
             text=element_text(family="serif", size=12)) +
       guides(fill=FALSE) +
       geom_text(aes(label=return_prty_pct(value)), nudge_y = 20, color = "#f0f0f0", family="serif", size=6) +
-      labs(title="Change in Median Household Income vs \n Change in Flagship School Tuition \n 1980 to 2018",
+      labs(title="Inflation adjusted change 1980 to 2018",
            x="", y="")
   })
   
@@ -76,7 +79,7 @@ shinyServer(function(input, output) {
     str4 <- paste0("Median household income 2017 in <i>", state_name, "</i>: <b><font color='#377EB8'>$",
                    prettyNum(round(median_hh_income_2017,0), big.mark=","), "</font></b></center>")
     
-    HTML(paste(str1, str2, str3, str4, "</center>", "</br>", sep = '<br/>'))  
+    HTML(paste(str1, str2, str3, str4, "</center>", sep = '<br/>'))  
   })
   
   output$savings_choice <- renderUI({
@@ -105,8 +108,8 @@ shinyServer(function(input, output) {
     yrs_to_save_1980 <- (tuition_1980*4)/yr_savings_1980
     yrs_to_save_2017 <- (tuition_2017*4)/yr_savings_2017
 
-    str2 <- paste0("<center>", round(yrs_to_save_1980,1), " years in 1980")
-    str3 <- paste0(round(yrs_to_save_2017,1), " years in 2017 </center>")
+    str2 <- paste0("<center><b><font face='sans-serif' size='+1.5'>", round(yrs_to_save_1980,1), " years in 1980")
+    str3 <- paste0(round(yrs_to_save_2017,1), " years in 2017 </font></b></center>")
     
     HTML(paste(str2, str3, sep = '<br/>'))
   })
