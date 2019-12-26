@@ -63,10 +63,10 @@ shinyServer(function(input, output) {
     school_name <- first(dat$institution_name)
     state_name <- first(dat$state)
     
-    str1 <- paste0("<center> Tuition 1980 at <i>", school_name, "</i> (inflation adjusted): <b><font color='#E41A1C'>$",
+    str1 <- paste0("<center> In-state tuition 1980 at <i>", school_name, "</i> (inflation adjusted): <b><font color='#E41A1C'>$",
                    prettyNum(round(tuition_1980,0), big.mark=","), "</font></b>")
     
-    str2 <- paste0("Tuition 2017 at <i>", school_name, "</i>: <b><font color='#E41A1C'>$",
+    str2 <- paste0("In-state tuition 2017 at <i>", school_name, "</i>: <b><font color='#E41A1C'>$",
                    prettyNum(round(tuition_2017,0), big.mark=","), "</font></b></br>")
     
     str3 <- paste0("Median household income 1980 in <i>", state_name,"</i> (inflation adjusted): <b><font color='#377EB8'>$",
