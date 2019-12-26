@@ -5,9 +5,9 @@ account: domrussel
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1610991
-bundleId: 2685339
+bundleId: 2692406
 url: https://domrussel.shinyapps.io/tuition_income/
-when: 1576943134.1373
+when: 1577382020.97712
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .gitattributes
